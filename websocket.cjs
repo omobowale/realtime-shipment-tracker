@@ -1,21 +1,27 @@
 const WebSocket = require("ws");
 
-const wss = new WebSocket.Server({ port: 8080 });
+const websocketServer = new WebSocket.Server({ port: 8080 });
 
-wss.on("connection", (ws) => {
+websocketServer.on("connection", (ws) => {
   console.log("Client connected");
 
-  // Simulating updates every 5 seconds
+  const shipmentId = "12345ABC"; // Single product shipment ID
+
+  // Static statuses and locations to give some form of dynamism
+  const statuses = ["In transit", "Shipped", "Out for Delivery", "Delivered"];
+  const locations = ["New York, NY", "Chicago, IL", "Los Angeles, CA", "Lagos, Nigeria"];
+
   setInterval(() => {
     const shipmentUpdate = {
-      id: Math.floor(Math.random() * 10000).toString(),
-      status: "In transit",
-      location: "New York, NY",
-      timestamp: new Date().toISOString(),
+      id: shipmentId, // Shipment ID for tracking
+      status: statuses[Math.floor(Math.random() * statuses.length)], // Fetch a random status
+      location: locations[Math.floor(Math.random() * locations.length)], // Fetch a random location
+      timestamp: new Date().toISOString(), // Current timestamp
     };
 
-    ws.send(JSON.stringify(shipmentUpdate));
-  }, 5000);
+    ws.send(JSON.stringify(shipmentUpdate)); // Send update through WebSocket
+  }, 5000); // Every 5 seconds
+
 });
 
 console.log("WebSocket server running on ws://localhost:8080");

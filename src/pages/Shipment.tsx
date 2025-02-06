@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import CustomLabelValue from "../components/CustomLabelValue";
+import { Vortex } from "react-loader-spinner";
 
 // Types for Shipment data
 interface ShipmentDataUpdate {
@@ -22,8 +24,7 @@ const Shipment: React.FC = () => {
 
         websocket.onmessage = (event) => {
             const newUpdate = JSON.parse(event.data) as ShipmentDataUpdate;
-            // Only keep the last three (3) updates
-            setData((prevUpdates) => [newUpdate, ...prevUpdates].slice(0, 3));
+            setData([newUpdate]);
         };
 
         // Cleanup WebSocket on component unmount
@@ -34,17 +35,30 @@ const Shipment: React.FC = () => {
 
     return (
         <div>
-            <h1>Shipment Tracker</h1>
+            <h1 className="mb-4">Shipment Tracker</h1>
             <div className="shipment-updates">
                 {data.length === 0 ? (
-                    <p>Waiting for updates...</p>
+                    <div className="text-center">
+                        <div className="mx-auto text-center w-full flex justify-center">
+                            <Vortex
+                                visible={true}
+                                height="80"
+                                width="80"
+                                ariaLabel="vortex-loading"
+                                wrapperStyle={{}}
+                                wrapperClass="vortex-wrapper"
+                                colors={['red', 'green', 'blue', 'yellow', 'orange', 'purple']}
+                            />
+                        </div>
+                        <p>Waiting for updates...</p>
+                    </div>
                 ) : (
                     data.map((d) => (
-                        <div key={d.id} className="shipment-update">
-                            <p><strong>Shipment ID:</strong> {d.id}</p>
-                            <p><strong>Status:</strong> {d.status}</p>
-                            <p><strong>Location:</strong> {d.location}</p>
-                            <p><strong>Last Updated:</strong> {new Date(d.timestamp).toLocaleTimeString()}</p>
+                        <div key={d.id} className="shipment-update mb-3">
+                            <CustomLabelValue label="Shipment ID" value={d.id} />
+                            <CustomLabelValue label="Status" value={d.status} />
+                            <CustomLabelValue label="Location" value={d.location} />
+                            <CustomLabelValue label="Last updated date" value={new Date(d.timestamp).toLocaleTimeString()} />
                         </div>
                     ))
                 )}
