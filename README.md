@@ -1,50 +1,71 @@
-# React + TypeScript + Vite
+# Real-Time Shipment Tracking
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a simple Real-Time Shipment Tracking application built using React and WebSockets. The application simulates real-time shipment updates and dynamically updates the UI with the latest shipment status every 5 seconds.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Simulated shipment updates every 5 seconds.
+- Real-time updates via WebSockets.
+- TailwindCSS for styling the UI.
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+To run this application locally, you need to have the following installed:
 
-- Configure the top-level `parserOptions` property like this:
+- Node.js (version 16 or higher)
+- npm (Node Package Manager)
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+
+## Setup instructions
+
+1. Clone the repository
+- First, clone this repository to your local machine:
+
+
+```bash
+git clone https://github.com/omobowale/realtime-shipment-tracker.git
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+2. Install dependencies
+- Navigate to the project directory and install the required dependencies using npm:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+
+```bash
+cd realtime-shipment-tracker
+npm install
 ```
+
+
+3. Run the development server
+- Start the development server to run the app locally:
+
+```bash
+npm run dev
+```
+
+- This will run the development server at:
+
+```bash
+http://localhost:3000
+```
+
+- Open this url in your browser for action
+
+
+4. Run the websocket server
+- Open another terminal and run the websocket server using the following command
+
+```bash
+node websocket.cjs
+```
+
+
+5. Simulated WebSocket Updates
+
+The WebSocket server is simulated on the frontend. Every 5 seconds, the application generates a new shipment update and sends it over WebSocket to the frontend, which then updates the UI accordingly.
+
+6. Customizing the Application (Optional)
+
+- Change Shipment Status: You can modify the array of possible statuses in the code to match different shipment stages.
+Location Changes: You can customize the array of locations to simulate different shipment routes.
