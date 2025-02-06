@@ -33,7 +33,7 @@ git clone https://github.com/omobowale/realtime-shipment-tracker.git
 
 ```bash
 cd realtime-shipment-tracker
-npm install
+npm install --force
 ```
 
 

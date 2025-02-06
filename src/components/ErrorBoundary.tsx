@@ -16,6 +16,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   // This is used to update the state when an error is caught
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    console.log("error", error)
     return { hasError: true };
   }
 
