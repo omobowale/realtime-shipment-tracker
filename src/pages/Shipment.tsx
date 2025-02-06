@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import CustomLabelValue from "../components/CustomLabelValue";
 import { Vortex } from "react-loader-spinner";
 import useCustomInfoDisplay from "../hooks/useCustomInfoDisplay";
@@ -18,7 +18,7 @@ const Shipment: React.FC = () => {
 
   // WebSocket state
   const [websocket, setWebSocket] = useState<WebSocket | null>(null);
-  const [retryCount, setRetryCount] = useState(0);
+  const retryCountRef = useRef(0); // Using useRef to avoid causing re-renders on retry
 
   // Maximum retry attempts
   const maxRetries = 5;
@@ -29,7 +29,7 @@ const Shipment: React.FC = () => {
 
     ws.onopen = () => {
       console.log("Connected to the web socket");
-      setRetryCount(0); // Reset retry count on successful connection
+      retryCountRef.current = 0; // Reset retry count on successful connection
     };
 
     ws.onmessage = (event) => {
@@ -48,11 +48,12 @@ const Shipment: React.FC = () => {
         console.error("WebSocket closed unexpectedly", event);
         setInfoDetails({ message: "WebSocket connection lost. Retrying...", isError: true });
 
-        if (retryCount < maxRetries) {
-          const retryDelay = Math.pow(2, retryCount) * 1000; // Exponential backoff
+        if (retryCountRef.current < maxRetries) {
+          const retryDelay = Math.pow(2, retryCountRef.current) * 1000; // Exponential backoff
+          retryCountRef.current += 1; // Increment the retry count
+
           setTimeout(() => {
-            console.log(`Reconnecting... Attempt ${retryCount + 1}`);
-            setRetryCount((prev) => prev + 1);
+            console.log(`Reconnecting... Attempt ${retryCountRef.current}`);
             connectWebSocket(); // Reconnect
           }, retryDelay);
         } else {
@@ -76,7 +77,7 @@ const Shipment: React.FC = () => {
     return () => {
       websocket?.close();
     };
-  }, [retryCount]); // Reconnect when retryCount changes
+  }, []); // Empty dependency array ensures this effect runs only once
 
   return (
     <div>
